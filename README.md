@@ -3,7 +3,7 @@
 
 **Implementation of a Recommendation Engine for Reddit**
 
-**You can check how I built this app in [my blog post]http://blog.manugarri.com/building-a-recommendation-engine-for-reddit-part-1/()**
+**You can check how I built this app in http://blog.manugarri.com/building-a-recommendation-engine-for-reddit-part-1/()**
 
 ###HOWTO
 
