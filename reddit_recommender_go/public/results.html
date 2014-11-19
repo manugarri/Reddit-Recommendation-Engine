@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Reddit Recommentadion Engine">
+    <meta name="author" content="@manugarri">
+    <title>Find a sub</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="css/custom.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Arvo:400,700|Signika:300' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="images/favicon.ico">
+  </head>
+  <body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type=text/javascript>
+$( document ).ready(function() {
+    $('#fail').hide();
+    $('#results').text('');
+    $('#loading').show();
+    $('#search_header').hide();
+    $('#search_msg').text("Please wait while I fetch your recommendations");
+    $('#search_msg').show();
+    $('#fail').hide();
+    $('.results2').empty();
+    $.post('/results', {
+        text: $('#query').val(),
+    }).done(function(result) {
+        $('#loading').hide();
+        $('#search_msg').hide()
+	$('#n_subs').text("After analyzing " + result.nsubs + " Subreddits you like,");
+        $('#search_header').text("these are the Subreddits recommended for you:");
+        $('#search_header').show();
+        $.each( result.subs, function( i, item ) {
+          $( ".results2" ).append( "<p><a class='results_subs' target='_blank' href='http://www.reddit.com/r/" + item + "'>"+ item + "</a></p>" );
+        });
+    }).fail(function() {
+        $('#search_header').text("An unexpected error happened!");
+        $('#search_header').show();
+        $('#loading').hide();
+        $('#search_msg').hide();
+        get_fail_gif();
+    });
+});
+
+function get_fail_gif() {
+  $.getJSON("http://api.giphy.com/v1/gifs/search?q=fail&api_key=dc6zaTOxFJmzC")
+    .done(function (results) {
+        var gif_url = results.data[Math.floor(Math.random()*results.data.length)]
+                    .images
+                    .original
+                    .url;
+        $("#fail").attr("src", gif_url );
+        $("#fail").show();
+      })
+};
+    </script>
+
+    <!-- Main jumbotron -->
+    <div class="jumbotron">
+      <div class="container">
+        <h2>The Engine is calculating your results</h2>
+	<p><em>On the meanwhile, you might wanna check the <a href="http://blog.manugarri.com/building-a-recommendation-engine-for-reddit-part-1/" target="_blank">blog post</a> where I explain how I built the engine</em></p>
+      </div>
+    </div>
+
+
+    <div class="container">
+
+      <!-- Results area -->
+          <div class="results">
+		  <b><h2 id="n_subs"><h2></b>
+            <h2 id="search_msg"></h2>
+            <h2 id="search_header"><h2>
+            <img id="loading" style="display: none" src="images/dog_working.gif">
+            <p><strong><span id="results">{{results}}</span></strong></p>
+            <div class="results2">
+              {% for sub in data %}
+              <p><a class='results2' target='_blank' href="http://www.reddit.com/r/{{ sub }}"> {{ sub }} </a></p>
+              {% endfor %}
+            </div>
+    </div> 
+      <hr>
+
+      <footer>
+        <p><em>Made by </em><a href="http://www.manugarri.com" target="_blank">@manugarri</a> with <3 for Reddit</em></p>
+      </footer>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

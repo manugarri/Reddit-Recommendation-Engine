@@ -1,0 +1,49 @@
+.jumbotron h1{
+  font-family: 'Signika' sans-serif;
+  font-weight: 700
+}
+
+.container h2{
+  font-family: 'Signika' sans-serif;
+  font-weight: 400
+}
+
+.jumbotron {
+  background-color:#D0E2F6;
+}
+
+.btn-primary {
+  background-color: #FF6700;
+  color: #FFF;
+  border-color: #FF6755;
+}
+
+.btn-primary:hover {
+  background-color: #FF6755;
+  border-color: #FF6700;
+}
+
+img #loading {
+  height:30px;
+  width:auto;
+}
+
+p {
+  font-family: 'Signika' 'sans-serif';
+}
+
+.results {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+footer {
+    display: table;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.results img {
+  height: 440px;
+}

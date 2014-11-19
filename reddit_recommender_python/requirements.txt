@@ -1,0 +1,8 @@
+Flask
+pandas
+praw
+sqlalchemy
+gunicorn
+Flask-SQLAlchemy
+psycopg2
+requests

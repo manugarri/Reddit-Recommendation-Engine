@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Find a sub</title>
+
+    <link href="{{url_for('static',filename='css/bootstrap.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='css/custom.css')}}" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Arvo:400,700|Signika:300' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
+  </head>
+
+  <body>
+  <script type=text/javascript>
+
+    function query() {
+    $('#fail').hide();
+    $('#results').text('');
+    $('#loading').show();
+    $('#search_header').hide();
+    $('#search_msg').text("Hold on plz, I'm fetching your recommendationz");
+    $('#search_msg').show();
+    $('#fail').hide();
+    $('.results2').empty();
+    $.post('/query', {
+        text: $('#query').val(),
+    }).done(function(result) {
+        $('#loading').hide();
+        $('#search_msg').hide()
+        $('#search_header').text("Done! You should check out these subs:");
+        $('#search_header').show();
+        $.each( result.subs, function( i, item ) {
+          $( ".results2" ).append( "<p><a class='results_subs' target='_blank' href='http://www.reddit.com/r/" + item + "'>"+ item + "</a></p>" );
+        });
+    }).fail(function() {
+        $('#search_header').text("{{ ('Wrong query lolz') }}");
+        $('#search_header').show();
+        $('#loading').hide();
+        $('#search_msg').hide();
+        get_fail_gif();
+    });
+};
+
+function get_fail_gif() {
+  $.getJSON("http://api.giphy.com/v1/gifs/search?q=fail&api_key=dc6zaTOxFJmzC")
+    .done(function (results) {
+        var gif_url = results.data[Math.floor(Math.random()*results.data.length)]
+                    .images
+                    .original
+                    .url;
+        $("#fail").attr("src", gif_url );
+        $("#fail").show();
+      })
+};
+
+    </script>
+
+    <!-- Main jumbotron -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Reddit recommendation engine (Beta)</h1>
+        <p>A basic implementation of a recommendation engine. It can recommend personalized subreddits based on each sub userbase</p>
+
+      <h2>Discover new subreddits based on your subscriptions</h2>
+      <form action="{{ url_for('get_user_auth') }}"  class="new-entry" )>
+        <input type=submit value="Recommend me!" class="btn btn-primary">
+      </form>
+<!--
+        <h2> Get recommendations for ANY redditor (and get approximate recommendations...)</h2>
+         <p>
+            <input type="text"  onkeydown="if (event.keyCode == 13) query();" id="query" class="form-control" placeholder="redditor name here plz. redditor name is Case sensitive">
+         </p>
+        <p><a class="btn btn-primary btn-lg" href="javascript:query();">Let's find out!</a></p>
+-->
+      </div>
+    </div>
+    <div class="container">
+
+      <!-- Results area -->
+          <div class="results">
+            <h2 id="search_msg">{{search_msg}}</h2>
+            <h2 id="search_header">{{text}}<h2>
+            <img id="loading" style="display: none" src="{{url_for('static', filename='images/dog_working.gif')}}">
+            <p><strong><span id="results">{{results}}</span></strong></p>
+            <div class="results2"></div>
+
+          </div>
+    </div> 
+      <hr>
+
+      <footer>
+        <p><em>Made by </em><a href="http://www.reddit.com/u/manueslapera" target="_blank">/u/Manueslapera</a> with <3 for Reddit</em></p>
+      </footer>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-19547460-3', 'manugarri.com');
+      ga('send', 'pageview');
+
+    </script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+  </body>
+</html>
